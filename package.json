@@ -1,0 +1,12 @@
+{
+  "name": "wallet",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "babel-runtime": "^6.26.0",
+    "coinstack-sdk-js": "^1.1.19",
+    "meteor-node-stubs": "^0.3.2"
+  }
+}
