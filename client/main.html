@@ -110,108 +110,11 @@
               </div>
             </div>
             <div class="widget stay-on-collapse" id="widget-leftbar">
-              <nav role="navigation" class="widget-body navbar-fixed-top clearfix navbar-bunting" style="top: 0px;">
-                <ul class="acc-menu visible" style="height: auto; margin-left: 0px;">
-                  <li class="nav-separator" data-localize="nav_overview">Overview</li>
-                  <li class="open active hasChild">
-                    <a href="javascript:;">
-                      <span class="icon">
-                        <i class="ion-android-home"></i>
-                      </span>
-                      <span class="text" data-localize="nav_dashboard">Wallets</span>
-                    </a>
-                    <!--
-                    <ul class="acc-menu visible" style="height: auto;">
-                      <li>
-                        <a href="./">
-                          <span class="text">Dashboard 1</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="index-small.html">
-                          <span class="text">Dashboard 2</span>
-                        </a>
-                      </li>
-                      <li class="active">
-                        <a href="index-horizontal.html">
-                          <span class="text">Dashboard 3</span>
-                        </a>
-                      </li>
-                    </ul>
-                    -->
-                  </li>
-                  <li class="hasChild">
-                    <a href="javascript:;">
-                      <span class="icon">
-                        <i class="ion-android-mail"></i>
-                      </span>
-                      <span class="text" data-localize="nav_email">Friends</span>
-                    </a>
-                    <ul class="acc-menu">
-                      <li>
-                        <a href="app-inbox.html">
-                          <span class="text" data-localize="nav_email_inbox">Inbox</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="app-inbox-read.html">
-                          <span class="text" data-localize="nav_email_inbox_read">Inbox Read</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="app-inbox-compose.html">
-                          <span class="text" data-localize="nav_email_inbox_compose">Inbox Compose</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a href="app-tasks.html">
-                      <span class="icon">
-                        <i class="ion-android-done-all"></i>
-                      </span>
-                      <span class="text" data-localize="nav_projects">Transactions</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="todo.html">
-                      <span class="icon">
-                        <i class="ion-android-checkbox"></i>
-                      </span>
-                      <span class="text" data-localize="nav_to_do_list">Config list</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span class="icon">
-                        <i class="ion-android-create"></i>
-                      </span>
-                      <span class="text" data-localize="nav_notes">ETC 1</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span class="icon">
-                        <i class="ion-android-checkbox"></i>
-                      </span>
-                      <span class="text" data-localize="nav_to_do_list">ETC 2</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <span class="icon">
-                        <i class="ion-android-checkbox"></i>
-                      </span>
-                      <span class="text" data-localize="nav_to_do_list">ETC 3</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
             </div>
           </div>
         </div>
       </div>
-      <div class="static-content-wrapper" style="top: 75px;">
+      <div class="static-content-wrapper">
         <div class="static-content">
           <div class="page-content">
             <!--
@@ -225,13 +128,15 @@
             </div>
             -->
             <div class="container-fluid">
+              {{> loginButtons}}
               <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
                   <div class="panel panel-default alt with-footer">
                     <div class="panel-heading">
                       <h2 class="title">Wallet</h2>
                       <div class="panel-ctrls">
                         <!--<div class="badge badge-info">99</div>-->
+                        <div id="addAddress" class="badge badge-info"><i class="ion-plus"></i></div>
                       </div>
                     </div>
                     <div class="panel-body p-n" style="max-height: 462px;overflow-x: auto;">
@@ -248,8 +153,8 @@
                               </span>
                             </div>
                             <div class="media-body">
-                              <span class="name">{{this.label}}</span>
-                              <span class="time">{{this.privatekey}}</span>
+                              <span class="name">{{this.name}}</span>
+                              <span class="time">{{this.address}}</span>
                             </div>
                           </a>
                         </li>
