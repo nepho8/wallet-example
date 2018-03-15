@@ -87,5 +87,8 @@ Template.wallets.events({
 
     console.log(Meteor.userId());
     console.log(wallet);
+  },
+  "click a[name='checkBalance']"(event, instance) {
+    console.log('checkBalance');
   }
 });

@@ -1,4 +1,5 @@
 import { Mongo } from 'meteor/mongo';
+import CoinStack from 'coinstack-sdk-js';
 
 Wallets = new Mongo.Collection('wallets');
 
@@ -26,6 +27,8 @@ Meteor.methods({
         Wallets.insert(walletAttributes);
 
         return true;
+    },
+    'checkAddress'(walletAttributes) {
+        
     }
 });
-
