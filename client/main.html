@@ -1,6 +1,6 @@
 <head>
   <meta charset="utf-8">
-  <title>Tectonic Admin Theme</title>
+  <title>Test Wallet</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -86,7 +86,7 @@
 </head>
 
 <body class="infobar-offcanvas layout-horizontal topnav-collapsed" style="">
-  {{> wallets}}
+  {{#if isForm}} {{> form}} {{else}} {{> wallets}} {{/if}}
 </body>
 
 <template name="wallets">
@@ -193,7 +193,7 @@
           <div class="clearfix">
             <ul class="list-unstyled list-inline pull-left">
               <li>
-                <h6 class="m0">© 2018 Wallet</h6>
+                <h6 class="m0" id="changeForm">© 2018 Wallet</h6>
               </li>
             </ul>
           </div>
@@ -203,20 +203,10 @@
   </div>
 </template>
 
-<template name="info">
-  <h2>Learn Meteor!</h2>
-  <ul>
-    <li>
-      <a href="https://www.meteor.com/try" target="_blank">Do the Tutorial</a>
-    </li>
-    <li>
-      <a href="http://guide.meteor.com" target="_blank">Follow the Guide</a>
-    </li>
-    <li>
-      <a href="https://docs.meteor.com" target="_blank">Read the Docs</a>
-    </li>
-    <li>
-      <a href="https://forums.meteor.com" target="_blank">Discussions</a>
-    </li>
-  </ul>
+<template name="form">
+  <h1>TestChain</h1>
+    <div class="form-group">
+      <input id="address" type="text" placeholder="주소를 입력해주세요" class="form-control input-md">
+    </div>
+  <button id="SubmitBtn" type="submit" class="btn btn-primary">요청</button>
 </template>

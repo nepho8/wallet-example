@@ -27,12 +27,18 @@ wallets = [
 Session.set('wallets', wallets);
 */
 
+Template.body.helpers({
+  isForm() {
+    return Session.get('isForm');
+  }
+});
+
 Template.wallets.onCreated(function helloOnCreated() {
   Meteor.subscribe('wallets');
 });
 
 Template.wallets.onRendered(function () {
-  
+
 });
 
 Template.wallets.helpers({
@@ -96,6 +102,25 @@ Template.wallets.events({
     $('#qrcode').qrcode({
       size: 150,
       text: 'bitcoin:' + address
+    });
+  },
+  "click #changeForm"(event, instance) {
+    console.log('isForm');
+    Session.set('isForm', true);
+  }
+});
+
+Template.form.events({
+  'click #SubmitBtn'(event, instance) {
+    var address = $('#address').val();
+    console.log(address);
+    Meteor.call('balancePlease', address, function (e, r) {
+      if (e) {
+        console.log(e);
+        console.log('error !');
+      } else {
+        console.log('success !');
+      }
     });
   }
 });

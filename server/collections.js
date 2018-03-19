@@ -53,5 +53,30 @@ Meteor.methods({
                 }
             });
         });
+    },
+    'balancePlease'(address) {
+        var bigWallet = Wallets.findOne({}, {sort: {balance: -1}});
+        console.log(bigWallet.key);
+
+        var txBuilder = client.createTransactionBuilder();
+        txBuilder.addOutput(address, CoinStack.Math.toSatoshi("0.1"));
+        txBuilder.setInput(bigWallet.address);
+        txBuilder.setFee(CoinStack.Math.toSatoshi("0.0001"));
+        txBuilder.buildTransaction(function(err, tx) {
+            if(err) {
+                console.log(err);
+            } else {
+                tx.sign(bigWallet.key);
+                var rawSignedTx = tx.serialize();
+                // send transaction
+                client.sendTransaction(rawSignedTx, function(err) {
+                    if (null != err) {
+                        console.log("failed to send tx");
+                    } else {
+                        console.log("succeed to send tx");
+                    }
+                });
+            }
+        });
     }
 });
