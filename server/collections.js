@@ -1,9 +1,13 @@
 import { Mongo } from 'meteor/mongo';
-import CoinStack from 'coinstack-sdk-js';
+//import CoinStack from 'coinstack-sdk-js';
 
 Wallets = new Mongo.Collection('wallets');
 
-Meteor.publish('wallets', function() {
+var accessKey = "";
+var secretKey = "";
+client = new CoinStack(accessKey, secretKey, 'testchain.blocko.io', 'https');
+
+Meteor.publish('wallets', function () {
     return Wallets.find({
         user: this.userId
     });
@@ -28,7 +32,26 @@ Meteor.methods({
 
         return true;
     },
-    'checkAddress'(walletAttributes) {
-        
+    'checkBalance'(address) {
+        console.log('checkBalance');
+        console.log(address);
+
+        walletAttributes = {};
+        walletAttributes._id = address;
+        walletAttributes.user = Meteor.userId();
+
+        client.getBalance(address, function (err, balance) {
+            console.log(balance);
+            walletAttributes.balance = balance;
+
+            Wallets.update({
+                _id: walletAttributes._id,
+                user: walletAttributes.user
+            }, {
+                $set: {
+                    balance: walletAttributes.balance
+                }
+            });
+        });
     }
 });

@@ -130,8 +130,19 @@
               <div class="row">
                 <div class="col-md-5">
                   <div class="panel panel-default alt with-footer">
+                      <div class="panel-heading">
+                          <center>
+                            <div id="qrcode"></div>
+                          </center>
+                        {{#if wallet}}
+                        <center>
+                          {{wallet.address}}<br />
+                          {{wallet.balance}}
+                        </center>
+                        {{/if}}
+                      </div>
                     <div class="panel-heading">
-                      <h2 class="title">Wallet</h2>
+                      <h2 class="title">Wallets</h2>
                       <div class="panel-ctrls">
                         <!--<div class="badge badge-info">99</div>-->
                         <div id="addAddress" class="badge badge-info"><i class="ion-plus"></i></div>
@@ -139,9 +150,9 @@
                     </div>
                     <div class="panel-body p-n" style="max-height: 462px;overflow-x: auto;">
                       <ul class="media-list scroll-content m-n">
-                        {{#each walltes}}
+                        {{#each wallets}}
                         <li class="media b-bl">
-                          <a href="#" name="checkBalance">
+                          <a href="#" name="checkBalance" value="{{this.address}}" keyvalue="{{this.key}}">
                             <div class="media-left">
                               <span class="icon teal">
                                 <!--<div class="ion-social-bitcoin" data-toggle="tooltip" data-placement="bottom" title="" data-pack="social" data-tags="currency, trade, money"
@@ -152,6 +163,7 @@
                             </div>
                             <div class="media-body">
                               <span class="name">{{this.name}}</span>
+                              <span class="time">{{this.address}}</span>
                               <span class="time">{{this.address}}</span>
                             </div>
                           </a>

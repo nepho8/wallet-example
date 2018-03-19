@@ -23,6 +23,7 @@ ddp-rate-limiter@1.0.7
 ddp-server@2.1.2
 deps@1.0.12
 diff-sequence@1.1.0
+dschulz:jquery-qrcode@1.0.2
 dynamic-import@0.3.0
 ecmascript@0.10.5
 ecmascript-runtime@0.5.0
@@ -70,6 +71,7 @@ server-render@0.3.0
 service-configuration@1.0.11
 session@1.1.7
 shell-server@0.3.1
+shepelt:coinstack@1.1.21
 shim-common@0.1.0
 socket-stream-client@0.1.0
 spacebars@1.0.15

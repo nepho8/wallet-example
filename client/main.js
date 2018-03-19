@@ -1,14 +1,14 @@
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
-import CoinStack from 'coinstack-sdk-js';
+//import CoinStack from 'coinstack-sdk-js';
 
 import './main.html';
 
 Wallets = new Mongo.Collection('wallets');
 
-var accessKey = "c7dbfacbdf1510889b38c01b8440b1";
-var secretKey = "10e88e9904f29c98356fd2d12b26de";
-client = new CoinStack(accessKey, secretKey, 'testchain.blocko.io', 'https');
+var accessKey = "";
+var secretKey = "";
+//client = new CoinStack(accessKey, secretKey, 'testchain.blocko.io', 'https');
 
 //L5edNknQjp2n7HYpDbnw2gi1cb4dYuCyDCJ18GR4NqvSJNAMKGyV, 13pCyB8Lqu9S3A8FRcjSiiW5USRmKnyWQY
 //L1DE3xtKZGcfUtn5Y6q7geP2x12T1NZ49DqQT9kC3mGd8VffXVdQ, 16sudTXF68ndNFe7hj9LHYBVkXe7EfafHZ
@@ -29,38 +29,26 @@ Session.set('wallets', wallets);
 
 Template.wallets.onCreated(function helloOnCreated() {
   Meteor.subscribe('wallets');
-  //Session.set('wallets', Wallets.find().fetch());
-  /*privKey = CoinStack.ECKey.createKey();
-  addr = CoinStack.ECKey.deriveAddress(privKey);
-  console.log(privKey);
-  console.log(addr);
-  */
-  /*
-  var txBuilder = client.createTransactionBuilder();
-  txBuilder.addOutput("13pCyB8Lqu9S3A8FRcjSiiW5USRmKnyWQY", CoinStack.Math.toSatoshi("100"));
-  txBuilder.setInput("");
-  txBuilder.setFee(CoinStack.Math.toSatoshi("0.0001"));
+});
 
-  txBuilder.buildTransaction(function (err, tx) {
-    tx.sign("");
-    var rawSignedTx = tx.serialize();
-    console.log(rawSignedTx)
-    client.sendTransaction(rawSignedTx, function (err) {
-      if (null != err) {
-        console.log("failed to send tx");
-      }
-    });
-  });
-  */
-
+Template.wallets.onRendered(function () {
+  
 });
 
 Template.wallets.helpers({
-  counter() {
-    return Template.instance().counter.get();
-  },
-  walltes() {
+  wallets() {
     return Wallets.find({});
+  },
+  wallet() {
+    if (Session.get('viewAddress')) {
+      return Wallets.findOne({ _id: Session.get('viewAddress') });
+    } else {
+      return false;
+    }
+  },
+  bitcoinAddress() {
+    console.log(Session.get('viewAddress'));
+    return Session.get('viewAddress');
   }
 });
 
@@ -76,8 +64,8 @@ Template.wallets.events({
       key: key
     };
 
-    Meteor.call('addAddress', wallet, function(e, r){
-      if(e) {
+    Meteor.call('addAddress', wallet, function (e, r) {
+      if (e) {
         console.log(e);
         alert('error !');
       } else {
@@ -90,5 +78,24 @@ Template.wallets.events({
   },
   "click a[name='checkBalance']"(event, instance) {
     console.log('checkBalance');
+    console.log($(event.currentTarget).attr('value'));
+
+    var address = $(event.currentTarget).attr('value');
+    Session.set('viewAddress', address);
+
+    Meteor.call('checkBalance', address, function (e, r) {
+      if (e) {
+        console.log(e);
+        console.log('error !');
+      } else {
+        console.log('success !');
+      }
+    });
+
+    $('#qrcode').empty();
+    $('#qrcode').qrcode({
+      size: 150,
+      text: 'bitcoin:' + address
+    });
   }
 });
