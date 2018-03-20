@@ -8,7 +8,7 @@ Wallets = new Mongo.Collection('wallets');
 
 var accessKey = "";
 var secretKey = "";
-//client = new CoinStack(accessKey, secretKey, 'testchain.blocko.io', 'https');
+client = new CoinStack(accessKey, secretKey, 'testchain.blocko.io', 'https');
 
 //L5edNknQjp2n7HYpDbnw2gi1cb4dYuCyDCJ18GR4NqvSJNAMKGyV, 13pCyB8Lqu9S3A8FRcjSiiW5USRmKnyWQY
 //L1DE3xtKZGcfUtn5Y6q7geP2x12T1NZ49DqQT9kC3mGd8VffXVdQ, 16sudTXF68ndNFe7hj9LHYBVkXe7EfafHZ
@@ -47,7 +47,13 @@ Template.wallets.helpers({
   },
   wallet() {
     if (Session.get('viewAddress')) {
-      return Wallets.findOne({ _id: Session.get('viewAddress') });
+      var returnVal;
+      if (Wallets.findOne({ _id: Session.get('viewAddress') })) {
+        returnVal = Wallets.findOne({ _id: Session.get('viewAddress') });
+        returnVal.balance = CoinStack.Math.toBitcoin(returnVal.balance);
+      }
+
+      return returnVal;
     } else {
       return false;
     }
@@ -85,9 +91,13 @@ Template.wallets.events({
   "click a[name='checkBalance']"(event, instance) {
     console.log('checkBalance');
     console.log($(event.currentTarget).attr('value'));
+    console.log($(event.currentTarget).attr('keyvalue'));
 
     var address = $(event.currentTarget).attr('value');
+    var addressKey = $(event.currentTarget).attr('keyvalue');
+
     Session.set('viewAddress', address);
+    Session.set('viewAddressKey', addressKey);
 
     Meteor.call('checkBalance', address, function (e, r) {
       if (e) {
@@ -107,6 +117,33 @@ Template.wallets.events({
   "click #changeForm"(event, instance) {
     console.log('isForm');
     Session.set('isForm', true);
+  },
+  "click #sendBTC"(event, instance) {
+    console.log($('#toAddress').val());
+    console.log($('#coinAmount').val());
+    console.log(Session.get('viewAddressKey'));
+
+    // client
+    var txBuilder = client.createTransactionBuilder();
+    txBuilder.addOutput($('#toAddress').val(), CoinStack.Math.toSatoshi($('#coinAmount').val()));
+    txBuilder.setInput(CoinStack.ECKey.deriveAddress(Session.get('viewAddressKey')));
+    txBuilder.setFee(CoinStack.Math.toSatoshi("0.0001"));
+
+    txBuilder.buildTransaction(function (err, tx) {
+      if (err) {
+        console.log(err);
+      } else {
+        tx.sign(Session.get('viewAddressKey'));
+        var rawSignedTx = tx.serialize();
+
+        client.sendTransaction(rawSignedTx, function (err) {
+          if (null != err) {
+            console.log("failed to send tx");
+          }
+        });
+        console.log(rawSignedTx);
+      }
+    });
   }
 });
 

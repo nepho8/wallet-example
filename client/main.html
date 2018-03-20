@@ -126,7 +126,11 @@
             </div>
             -->
             <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-5">
               {{> loginButtons}}
+              </div>
+              </div>
               <div class="row">
                 <div class="col-md-5">
                   <div class="panel panel-default alt with-footer">
@@ -137,8 +141,13 @@
                         {{#if wallet}}
                         <center>
                           {{wallet.address}}<br />
-                          {{wallet.balance}}
+                          {{wallet.balance}} BTC
                         </center>
+                        <div class="col-md-3">
+                            <input id="toAddress" type="text" placeholder="전송할 주소를 입력해주세요" class="form-control input-md">
+                            <input id="coinAmount" type="text" placeholder="전송할 금액을 입력해주세요" class="form-control input-md">
+                        </div>
+                        <center><button id="sendBTC" type="submit" class="btn btn-primary">전송</button></center>
                         {{/if}}
                       </div>
                     <div class="panel-heading">
