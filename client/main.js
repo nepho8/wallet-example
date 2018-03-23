@@ -5,6 +5,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import './main.html';
 
 Wallets = new Mongo.Collection('wallets');
+Transactions = new Mongo.Collection('transactions');
 
 var accessKey = "";
 var secretKey = "";
@@ -35,6 +36,7 @@ Template.body.helpers({
 
 Template.wallets.onCreated(function helloOnCreated() {
   Meteor.subscribe('wallets');
+  Meteor.subscribe('transactions');
 });
 
 Template.wallets.onRendered(function () {
@@ -42,6 +44,15 @@ Template.wallets.onRendered(function () {
 });
 
 Template.wallets.helpers({
+  transactions() {
+    if (Session.get('viewAddress')) {
+      return Transactions.findOne({
+        _id: Session.get('viewAddress')
+      });
+    } else {
+      return false;
+    }
+  },
   wallets() {
     return Wallets.find({});
   },
@@ -100,6 +111,15 @@ Template.wallets.events({
     Session.set('viewAddressKey', addressKey);
 
     Meteor.call('checkBalance', address, function (e, r) {
+      if (e) {
+        console.log(e);
+        console.log('error !');
+      } else {
+        console.log('success !');
+      }
+    });
+
+    Meteor.call('checkTXs', address, function (e, r) {
       if (e) {
         console.log(e);
         console.log('error !');

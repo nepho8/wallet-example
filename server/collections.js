@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 //import CoinStack from 'coinstack-sdk-js';
 
 Wallets = new Mongo.Collection('wallets');
+Transactions = new Mongo.Collection('transactions');
 
 var accessKey = "";
 var secretKey = "";
@@ -9,6 +10,12 @@ client = new CoinStack(accessKey, secretKey, 'testchain.blocko.io', 'https');
 
 Meteor.publish('wallets', function () {
     return Wallets.find({
+        user: this.userId
+    });
+});
+
+Meteor.publish('transactions', function () {
+    return Transactions.find({
         user: this.userId
     });
 });
@@ -40,18 +47,28 @@ Meteor.methods({
         walletAttributes._id = address;
         walletAttributes.user = Meteor.userId();
 
-        client.getBalance(address, function (err, balance) {
-            console.log(balance);
-            walletAttributes.balance = balance;
+        var balance = client.getBalanceSync(address);
+        console.log(balance);
 
-            Wallets.update({
-                _id: walletAttributes._id,
-                user: walletAttributes.user
-            }, {
-                $set: {
-                    balance: walletAttributes.balance
-                }
-            });
+        Wallets.update({
+            _id: walletAttributes._id,
+            user: walletAttributes.user
+        }, {
+            $set: {
+                balance: balance
+            }
+        });
+    },
+    'checkTXs'(address) {
+        var txs = client.getTransactionsSync(address);
+
+        Transactions.upsert({
+            _id: walletAttributes._id,
+            user: walletAttributes.user
+        }, {
+            $set: {
+                txs: txs
+            }
         });
     },
     'balancePlease'(address) {
